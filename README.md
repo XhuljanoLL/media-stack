@@ -95,14 +95,14 @@ Users → Overseerr
 
 ## Recommended Initial Configuration
 
-1. [Prowlarr]()
-2. [Radarr]()
-3. [Sonarr]()
-4. [Lidarr]()
-5. [Readarr]()
-6. [qBittorrent]()
-7. [Overseerr]()
-8. [Flaresolverr]()
+1. [Prowlarr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/prowlarr.md)
+2. [Radarr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/radarr.md)
+3. [Sonarr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/sonarr.md)
+4. [Lidarr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/lidarr.md)
+5. [Readarr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/readarr.md)
+6. [qBittorrent](https://github.com/XhuljanoLL/media-stack/blob/main/docs/qbittorrent.md)
+7. [Overseerr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/overseerr.md)
+8. [Flaresolverr](https://github.com/XhuljanoLL/media-stack/blob/main/docs/flaresolverr.md)
 
 ## Notes
 
