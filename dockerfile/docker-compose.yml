@@ -1,0 +1,248 @@
+## Created by Xhuljano Llapushi - xhu_95@hotmail.it
+## This is an application stack for media management using Overseer, for Windows.
+
+name: streaming-services
+networks:
+  streaming-stuff:
+    driver: bridge
+
+services:
+  ##===================================##
+  ##!! Removed Plex cause Windows and Docker doesn't work well with it. !!##
+  # plex:
+  #   image: lscr.io/linuxserver/plex:latest
+  #   container_name: plex
+  #   network_mode: host
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/Tirana
+  #   volumes:
+  #     - P:\Plex\Config:/config
+  #     - P:\Sonarr\tvshows:/data/tvshows
+  #     - P:\Radarr\Movies:/data/movies
+  #   restart: unless-stopped
+  ##===================================##
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Tirana
+    volumes:
+      - P:\Overseerr\Config:/config               ## CHANGE THIS ##
+    ports:
+      - 5055:5055
+    dns:                                          ## This was needed cause flaresolverr messes with the DNS.
+      - 8.8.8.8
+      - 1.1.1.1
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Tirana
+    volumes:
+      - P:\Prowlarr\Config:/config                ## CHANGE THIS ##
+      - P:\Prowlarr\Backup:/data/Backup           ## CHANGE THIS ##
+      - P:\Downloads:/data/downloads              ## CHANGE THIS ##
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Tirana
+    volumes:
+      - P:\Sonarr\Config:/config                ## CHANGE THIS ##
+      - P:\Sonarr\Backup:/data/Backup           ## CHANGE THIS ##
+      - P:\Sonarr\tvshows:/data/tvshows         ## CHANGE THIS ##
+      - P:\Downloads:/data/downloads            ## CHANGE THIS ##
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Tirana
+    volumes:
+      - P:\Radarr\Config:/config                ## CHANGE THIS ##
+      - P:\Radarr\Movies:/data/movies           ## CHANGE THIS ##
+      - P:\Downloads:/data/downloads            ## CHANGE THIS ##
+      - P:\Radarr\Backup:/data/Backup           ## CHANGE THIS ##
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Tirana
+    volumes:
+      - P:\Lidarr\Config:/config                ## CHANGE THIS ##
+      - P:\Lidarr\Music:/data/musicfolder       ## CHANGE THIS ##
+      - P:\Downloads:/data/downloads            ## CHANGE THIS ##
+      - P:\Lidarr\Backup:/data/Backup           ## CHANGE THIS ##
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  readarr:
+    image: ghcr.io/linuxserver/readarr:nightly-0.4.19.2811-ls400
+    platform: linux/amd64
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - P:\Readarr\Config:/config               ## CHANGE THIS ##
+      - P:\Readarr\Books:/data/books            ## CHANGE THIS ## # optional
+      - P:\Downloads:/data/downloads            ## CHANGE THIS ## # optional
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Europe/Tirana
+    ports:
+      - 8191:8191
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+  ##===================================##
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Tirana
+      - WEBUI_PORT=8080
+    ports:
+      - 8088:8080
+    volumes:
+      - P:\qbittorrent\config:/config           ## CHANGE THIS ##
+      - P:\Downloads:/downloads                 ## CHANGE THIS ##
+    restart: unless-stopped
+    networks:
+      - streaming-stuff
+
+#  ##================Monitoring===================##
+#  tautulli:
+#    image: ghcr.io/linuxserver/tautulli:latest
+#    container_name: tautulli
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=Europe/Tirana
+#    ports:
+#      - "8181:8181"
+#    volumes:
+#      - P:\Tautulli\config:/config              ## CHANGE THIS ##
+#      - P:\Tautulli\logs:/logs:ro               ## CHANGE THIS ##
+#    restart: unless-stopped
+#    networks:
+#      - streaming-stuff
+#   ##===================================##
+#   influxdb:
+#     image: influxdb:2
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#       - TZ=Europe/Tirana
+#     ports:
+#       - 8086:8086
+#     volumes:
+#       - P:\InfluxDB\influxdb2:/var/lib/influxdb2
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     networks:
+#       - streaming-stuff
+#   ##===================================##
+#   prometheus:
+#     image: prom/prometheus:latest
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#       - TZ=Europe/Tirana
+#     ports:
+#       - "9090:9090"
+#     volumes:
+#       - P:\Prometheus:/prometheus
+#       - P:\Prometheus\prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+#     command:
+#       - "--config.file=/etc/prometheus/prometheus.yml"
+#       - "--storage.tsdb.path=/prometheus"
+#       - "--web.enable-lifecycle"
+#     restart: unless-stopped
+#     networks:
+#       - streaming-stuff
+#   ##===================================##
+#   telegraf:
+#     image: telegraf:latest
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#       - TZ=Europe/Tirana
+#       - TELEGRAF_CONFIG_PATH=/etc/telegraf/telegraf.conf
+#     volumes:
+#       - P:\Telegraf\config:/etc/telegraf:ro
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     depends_on:
+#       - influxdb
+#     networks:
+#       - streaming-stuff
+#   ##===================================##
+#   grafana:
+#     image: grafana/grafana-oss:latest
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#       - TZ=Europe/Tirana
+#     ports:
+#       - "3000:3000"
+#     volumes:
+#       - P:\Grafana\config:/var/lib/grafana
+#     restart: unless-stopped
+#     depends_on:
+#       - influxdb
+#     networks:
+#       - streaming-stuff
+#  ##===================================##
