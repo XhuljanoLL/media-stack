@@ -19,8 +19,6 @@ The compose file has some extra stuff at the moment, including Plex (Plex and Do
 
 All services are orchestrated using **Docker Compose** for easy deployment and maintenance.
 
----
-
 ## Architecture Overview
 
 ```bash
@@ -35,8 +33,6 @@ Users → Overseerr
        Media Library
 ```
 
----
-
 ## Requirements
 
 - Docker Desktop
@@ -44,7 +40,6 @@ Users → Overseerr
 - At least 4 GB RAM
 - Sufficient disk space for media storage
 
----
 
 ## Setup Instructions
 
@@ -84,8 +79,6 @@ Users → Overseerr
     docker compose up -d
     ```
 
----
-
 ## Web Interfaces
 
 | Service | URL |
@@ -100,8 +93,6 @@ Users → Overseerr
 
 *(Default credentials for qBittorrent are usually **admin/adminadmin** — change immediately.)*
 
----
-
 ## Recommended Initial Configuration
 
 1. [Prowlarr]()
@@ -113,22 +104,16 @@ Users → Overseerr
 7. [Overseerr]()
 8. [Flaresolverr]()
 
----
-
 ## Notes
 
 - Designed for personal media management
 - No media files are included
 - You are responsible for complying with your local laws
 
----
-
 ## Credits
 
 - LinuxServer.io images
 - Overseerr, Sonarr, Radarr, Prowlarr, Lidarr, Readarr teams
 - Docker community
-
----
 
 Built for power users who believe in **self-hosting, data ownership, and control over their media libraries**.
